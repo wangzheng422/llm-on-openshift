@@ -21,33 +21,33 @@ spec:
       terminationGracePeriodSeconds: 120
       securityContext: {}
       containers:
-        - resources:
+        - name: server
+          resources:
             limits:
               cpu: '8'
               memory: 24Gi
               nvidia.com/gpu: '1'
             requests:
               cpu: '6'
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: http
-              scheme: HTTP
-            timeoutSeconds: 5
-            periodSeconds: 30
-            successThreshold: 1
-            failureThreshold: 3
+          # readinessProbe:
+          #   httpGet:
+          #     path: /health
+          #     port: http
+          #     scheme: HTTP
+          #   timeoutSeconds: 5
+          #   periodSeconds: 30
+          #   successThreshold: 1
+          #   failureThreshold: 3
           terminationMessagePath: /dev/termination-log
-          name: server
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: http
-              scheme: HTTP
-            timeoutSeconds: 8
-            periodSeconds: 100
-            successThreshold: 1
-            failureThreshold: 3
+          # livenessProbe:
+          #   httpGet:
+          #     path: /health
+          #     port: http
+          #     scheme: HTTP
+          #   timeoutSeconds: 8
+          #   periodSeconds: 100
+          #   successThreshold: 1
+          #   failureThreshold: 3
           env:
             - name: MODEL_ID
               value: google/flan-t5-xl
@@ -63,6 +63,12 @@ spec:
               value: '3000'
             - name: HOST
               value: '0.0.0.0'
+            - name: HTTP_PROXY
+              value: 'http://172.21.1.211:18801'
+            - name: HTTPS_PROXY
+              value: 'http://172.21.1.211:18801'
+            - name: HF_HUB_ENABLE_HF_TRANSFER
+              value: '0'
           securityContext:
             capabilities:
               drop:
@@ -76,15 +82,15 @@ spec:
               containerPort: 3000
               protocol: TCP
           imagePullPolicy: IfNotPresent
-          startupProbe:
-            httpGet:
-              path: /health
-              port: http
-              scheme: HTTP
-            timeoutSeconds: 1
-            periodSeconds: 30
-            successThreshold: 1
-            failureThreshold: 24
+          # startupProbe:
+          #   httpGet:
+          #     path: /health
+          #     port: http
+          #     scheme: HTTP
+          #   timeoutSeconds: 1
+          #   periodSeconds: 30
+          #   successThreshold: 1
+          #   failureThreshold: 24
           volumeMounts:
             - name: models-cache
               mountPath: /models-cache
@@ -107,8 +113,8 @@ spec:
           effect: NoSchedule
   strategy:
     type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 25%
-      maxSurge: 1
+    # rollingUpdate:
+    #   maxUnavailable: 25%
+    #   maxSurge: 1
   revisionHistoryLimit: 10
   progressDeadlineSeconds: 600
