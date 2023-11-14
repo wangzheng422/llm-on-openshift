@@ -56,7 +56,7 @@ spec:
             - name: REDIS_URL
               value: 'redis://default:Ygg8FgJc@my-doc-headless.llm-demo.svc.cluster.local:16432'
             - name: REDIS_INDEX
-              values: 'docs'
+              value: 'docs'
             - name: MAX_NEW_TOKENS
               value: '512'
             - name: TOP_K
