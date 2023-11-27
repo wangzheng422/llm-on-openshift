@@ -54,13 +54,14 @@ class CaikitLLM(LLM):
         run_manager: Optional[CallbackManagerForLLMRun] = None,
         **kwargs: Any,
     ) -> str:
-        if self.certificate_chain != "":
-            with open('certificate.pem', 'rb') as f:
-                creds = grpc.ssl_channel_credentials(f.read())
-        else:
-            creds = None
+        # if self.certificate_chain != "":
+        #     with open('certificate.pem', 'rb') as f:
+        #         creds = grpc.ssl_channel_credentials(f.read())
+        # else:
+        #     creds = None
         server_address = self.inference_server_url
-        channel = grpc.secure_channel(server_address, creds)
+        # channel = grpc.secure_channel(server_address, creds)
+        channel = grpc.insecure_channel(server_address)
 
         self.caikit_tgis_text_generation_stub = CaikitTgisTextGeneration(channel)
 
